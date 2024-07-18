@@ -1,6 +1,6 @@
 import React from 'react'
 
-import imagen01 from '../assets/imagen-bienvenida01.png'
+import imagen01 from '../../assets/imagen-bienvenida01.png'
 
 const BienvenidaPage = () => {
   return (

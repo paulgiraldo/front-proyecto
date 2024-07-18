@@ -11,18 +11,23 @@ const LayoutBase = ({ sesion }) => {
           <h1 className="font-bold">Aplicacion Espacio del Colaborador</h1>
           <nav className="flex gap-8">
             
-            {/*Renderizado condicional: sesion.activo===true y sesion.perfil='VACACIONES_USER' */}
-                <Link to="/vacaciones" className="hover:font-bold">Vacaciones</Link>
+            { sesion.activo && sesion.perfil === 'VACACIONES_USER' && (
+                <Link to="/vacaciones" className="hover:font-bold rounded-full bg-blue-300 px-3 text-center">Vacaciones</Link>
+             )}
+
+            { sesion.activo && sesion.perfil === 'ADMIN' && (
+                <Link to="/logup" className="hover:font-bold rounded-full bg-blue-300 px-3">Nuevo Usuario</Link>
+             )}
+
+            { sesion.activo  && (
+                <Link to="/logout" className="hover:font-bold text-red-500 rounded-full bg-white px-3 text-center">Cerrar Sesión</Link>
+             )}
 
 
-            {/*Renderizado condicional: sesion.activo===true y sesion.perfil='ADMIN' */}
-            <Link to="/logup" className="hover:font-bold">Logup</Link>
+            { !sesion.activo  && (
+                <Link to="/login" className="hover:font-bold text-blue-700 rounded-full bg-white px-3 text-center">Inicial Sesión</Link>
+             )}
 
-            {/*Renderizado condicional: sesion.activo===true */}
-            <Link to="/login" className="hover:font-bold">Logoff</Link>
-
-            {/*Renderizado condicional: sesion.activo===false */}
-            <Link to="/login" className="hover:font-bold">Login</Link>
 
           </nav>
         </div>
