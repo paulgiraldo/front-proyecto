@@ -13,7 +13,7 @@ const App = () => {
   const LOGIN_BASE = {
     activo : false,
     usuario : 'Usuario de Prueba',
-    perfil : 'VACACIONES_USER',
+    perfil : 'VACACION_USUARIO',
     token : ''
   }
 
@@ -27,8 +27,8 @@ const App = () => {
         <Route path='/' element={<LayoutBase sesion={sesion}  />}>
           <Route path='/' element={<BienvenidaPage />} />
 
-          { sesion.activo && sesion.perfil === 'VACACIONES_USER' && (
-            <Route path='/vacaciones' element={<VacacionesLista />} />
+          { sesion.activo && sesion.perfil === 'VACACION_USUARIO' && (
+            <Route path='/vacaciones' element={<VacacionesLista sesion={sesion} />} />
           )}
 
           { sesion.activo && sesion.perfil === 'ADMIN' && (

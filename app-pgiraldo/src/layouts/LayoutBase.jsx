@@ -11,7 +11,7 @@ const LayoutBase = ({ sesion }) => {
           <h1 className="font-bold">Aplicacion Espacio del Colaborador</h1>
           <nav className="flex gap-8">
             
-            { sesion.activo && sesion.perfil === 'VACACIONES_USER' && (
+            { sesion.activo && sesion.perfil === 'VACACION_USUARIO' && (
                 <Link to="/vacaciones" className="hover:font-bold rounded-full bg-blue-300 px-3 text-center">Vacaciones</Link>
              )}
 

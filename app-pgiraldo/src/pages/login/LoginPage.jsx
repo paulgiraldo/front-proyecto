@@ -2,8 +2,11 @@ import { useState } from "react"
 import BaseButton from "../../components/shared/BaseButton"
 import BaseInput from "../../components/shared/BaseInput"
 import { LoginService } from "../../services/LoginService"
+import { useNavigate } from "react-router-dom"
 
-const LoginPage = (sesion, setSesion) => {
+const LoginPage = ({ sesion, setSesion }) => {
+
+  const navigate = useNavigate();
 
   const INITIAL_FORM = {
     usuarioCod : '',
@@ -25,18 +28,19 @@ const LoginPage = (sesion, setSesion) => {
 
     const response = await LoginService(form)
 
-    console.log(response)
 
     if (response) {
-      // modificamos la variable de sesion
-      
-//      setSesion(...sesion,activo=true)
-//      setSesion(...sesion,usuario=response.)
-//      setSesion(...sesion,perfil=true)
-//      setSesion(...sesion,token=true)
+        const newSesion = {
+          activo : true,
+          usuario : response.usuarioNom,
+          perfil : response.usuarioRol[0].rolCod,
+          token : response.token
+        }
+
+        setSesion(newSesion)
 
 
-      navigate('/')
+        navigate('/')
     } else {
       // Mostramos un mensaje de un error
       console.log('OK')
