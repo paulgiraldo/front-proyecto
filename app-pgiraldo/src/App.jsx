@@ -7,6 +7,7 @@ import BienvenidaPage from './pages/login/BienvenidaPage'
 import VacacionesLista from './pages/vacaciones/VacacionesLista'
 import NuevoUsuario from './pages/logup/NuevoUsuario'
 import CerrarSesion from  './pages/login/CerrarSesion'
+import VacacionesCrea from './pages/vacaciones/VacacionesCrea'
 
 const App = () => {
 
@@ -24,28 +25,15 @@ const App = () => {
     <BrowserRouter>
       <Routes>
 
-        <Route path='/' element={<LayoutBase sesion={sesion}  />}>
+        <Route path='/' element={<LayoutBase />}>
           <Route path='/' element={<BienvenidaPage />} />
+          <Route path='/login' element={<LoginPage />} />
 
-          { sesion.activo && sesion.perfil === 'VACACION_USUARIO' && (
-            <Route path='/vacaciones' element={<VacacionesLista sesion={sesion} />} />
-          )}
-
-          { sesion.activo && sesion.perfil === 'ADMIN' && (
-            <Route path='/logup' element={<NuevoUsuario />} />
-          )}
-
-          { sesion.activo  && (
-            <Route path='/logout' element={<CerrarSesion />} />
-          )}
+          <Route path='/vacaciones' element={<VacacionesLista />} />
+          <Route path='/vacaciones/crea' element={<VacacionesCrea  />} />
+          <Route path='/logup' element={<NuevoUsuario />} />
+          <Route path='/logout' element={<CerrarSesion />} />
           
-          { !sesion.activo  && (
-            <Route path='/login' element={<LoginPage 
-                                            sesion={sesion}
-                                            setSesion={setSesion} 
-                                            />} />
-          )}
-
         </Route>
 
       </Routes>

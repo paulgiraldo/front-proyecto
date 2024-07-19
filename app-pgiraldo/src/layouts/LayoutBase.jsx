@@ -1,9 +1,34 @@
 import { Link, Outlet } from "react-router-dom"
+import authSesion from "../util/authSesion.js"
 
-const LayoutBase = ({ sesion }) => {
+const sesion = {
+  activo : false,
+  usuario : '',
+  perfil : '',
+  token : ''
+}
 
+const auth = { 'sesion': authSesion.existSesion() }  
 
-    console.log(sesion)
+if (auth.sesion) {
+  const sesion0 = { 'sesion': authSesion.getSesion() }
+  const sesion1 = JSON.parse(sesion0.sesion)  
+
+  sesion.activo = true
+  sesion.usuario=sesion1.usuario
+  sesion.perfil = sesion1.perfil
+  sesion.token = sesion1.token
+}
+
+const LayoutBase = () => {
+
+  console.log('Llego 01:')
+
+  console.log(auth)
+    
+  console.log(sesion)
+  console.log(sesion.activo)
+ 
   return (
     <>
       <header className='py-2 px-0 '>
