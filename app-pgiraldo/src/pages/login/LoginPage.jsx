@@ -6,16 +6,24 @@ import { useNavigate } from "react-router-dom"
 import { Navigate } from 'react-router-dom'
 import authSesion from "../../util/authSesion.js"
 
-const LoginPage = () => {
+const LoginPage = ({ sesion, setSesion }) => {
   
   const auth = { 'sesion': authSesion.existSesion() }  
+  
+  if (sesion.activo == false && auth.sesion == true) {
+    const sesion0 = { 'sesion': authSesion.getSesion() }
+    const sesion1 = JSON.parse(sesion0.sesion)  
+  
+    setSesion(sesion1)
+  }
 
-  const navigate = useNavigate();
 
   const INITIAL_FORM = {
     usuarioCod : '',
     password : ''
   }
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState(INITIAL_FORM)
 
@@ -41,9 +49,9 @@ const LoginPage = () => {
           token : response.token
         }
 
-       // authSesion.setSesion(newSesion)
        authSesion.setSesion(JSON.stringify(newSesion))
-       //authSesion.setSesion(JSON.parse(newSesion))
+
+        setSesion(newSesion)
 
 
         navigate('/')

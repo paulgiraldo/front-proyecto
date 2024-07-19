@@ -1,4 +1,0 @@
-https://render.com/
-https://neon.tech/
-
-Render soporta docker para que puedan instalar java con capa gratuita y neon es una base de datos en postgres con una capa gratuita

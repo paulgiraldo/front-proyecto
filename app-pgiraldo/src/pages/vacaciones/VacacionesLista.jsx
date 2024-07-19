@@ -1,23 +1,67 @@
 import { useEffect, useState } from "react"
-import { VacacionesListaService } from "../../services/LoginService"
+import { VacacionesListaService, VacacionesEliminaService } from "../../services/LoginService"
 import { useNavigate } from "react-router-dom";
-const VacacionesLista = ({ sesion }) => {
+import authSesion from "../../util/authSesion";
+import { Toaster, toast } from "sonner"
+
+const VacacionesLista = ({ sesion, setSesion }) => {
+
+  const auth = { 'sesion': authSesion.existSesion() }  
+ 
+  if (sesion.activo == false && auth.sesion == true) {
+    const sesion0 = { 'sesion': authSesion.getSesion() }
+    const sesion1 = JSON.parse(sesion0.sesion)  
+  
+    setSesion(sesion1)
+  }
 
   const navigate = useNavigate();
 
   const [vacaciones, setVacaciones] = useState([]);
 
+  const fetchData = async () => {
+    const response = await VacacionesListaService(sesion);
+    setVacaciones(response.response);
+    console.log("Ejecuto el fechData")
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await VacacionesListaService(sesion);
-      setVacaciones(response.response);
-    };
     fetchData();
   }, []);
 
   const handleNuevo= ( () => {
     navigate('/vacaciones/crea')
   })
+
+  const handleEliminar = async (event) => {
+    const { id } = event.target.dataset
+
+    console.log("antes event")
+    console.log(event.target)
+    console.log("despues event")
+
+    const opciones = {
+      codigo : id,
+      motivo : 'Desde la App',
+    }
+  
+    console.log('Llego al HandleEliminar: '+id)
+
+    const enviarData =  [sesion, opciones]
+    const response = await VacacionesEliminaService(enviarData)
+
+    console.log(response)
+
+    if (response) {
+      fetchData();
+      toast.success("Elemento Eliminado....")
+      navigate('/vacaciones')
+    } else {
+      console.log('Sucedio un Error')
+    }
+
+  }
+
 
   return (
     
@@ -34,7 +78,8 @@ const VacacionesLista = ({ sesion }) => {
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
-            <th className="px-4 py-2 border">Código</th>
+            <th className="px-4 py-2 border">Item</th>
+            <th className="px-4 py-2 border">DNI</th>
             <th className="px-4 py-2 border">Apellidos y Nombres</th>
             <th className="px-4 py-2 border">Fecha Inicial</th>
             <th className="px-4 py-2 border">Número de Días</th>
@@ -42,12 +87,13 @@ const VacacionesLista = ({ sesion }) => {
             <th className="px-4 py-2 border">Motivo</th>
             <th className="px-4 py-2 border">Aprob. Jefatura</th>
             <th className="px-4 py-2 border">Aprob. Gerencia</th>
-            <th className="px-4 py-2 border">Acciones</th>
+            <th className="px-4 py-2 border">Acción</th>
           </tr>
         </thead>
         <tbody>
           {vacaciones.map((vacacion) => (
             <tr key={vacacion.id}>
+              <td className="px-4 py-2 border">{vacacion.id}</td>
               <td className="px-4 py-2 border">{vacacion.trabCod}</td>
               <td className="px-4 py-2 border">{vacacion.trabNom}</td>
               <td className="px-4 py-2 border">{vacacion.fechaInicial}</td>
@@ -57,12 +103,30 @@ const VacacionesLista = ({ sesion }) => {
               <td className="px-4 py-2 border">{vacacion.aprobacion01}</td>
               <td className="px-4 py-2 border">{vacacion.aprobacion02}</td>
               <td className="px-4 py-2 border">
-                <button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
-                  Editar
-                </button>
-                <button className="bg-red-500 text-white px-2 py-1 rounded">
-                  Eliminar
-                </button>
+                { vacacion.aprobacion01=='N'? (
+                  <>
+                      <button className="bg-red-200 hover:bg-red-400 rounded-lg px-1 py-1"
+                          data-id={vacacion.id}
+/*                          
+                          onClick={ () => {
+                            toast('Quieres Eliminar el Elemento Seleccionado?',{
+                              action: {
+                                label: "Continuar",
+                                onClick: handleEliminar
+                              }
+                            })
+                          }}                                                    
+ */                      onClick={handleEliminar}   
+                      >
+                      ❌
+                      </button>
+                      <Toaster />
+
+                  </>
+
+                ) : (' ')
+                }
+
               </td>
             </tr>
           ))}

@@ -1,34 +1,33 @@
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 import authSesion from "../util/authSesion.js"
 
-const sesion = {
-  activo : false,
-  usuario : '',
-  perfil : '',
-  token : ''
-}
+const LayoutBase = ({ sesion, setSesion }) => {
+  const navigate = useNavigate();
 
-const auth = { 'sesion': authSesion.existSesion() }  
+  const auth = { 'sesion': authSesion.existSesion() }  
+  
+  if (sesion.activo == false && auth.sesion == true) {
+    const sesion0 = { 'sesion': authSesion.getSesion() }
+    const sesion1 = JSON.parse(sesion0.sesion)  
+  
+    setSesion(sesion1)
+  }
+  
+  const CerrarSesionAqui = () => {
+    const LOGIN_BASE = {
+      activo : false,
+      usuario : '',
+      perfil : '',
+      token : ''
+    }
 
-if (auth.sesion) {
-  const sesion0 = { 'sesion': authSesion.getSesion() }
-  const sesion1 = JSON.parse(sesion0.sesion)  
-
-  sesion.activo = true
-  sesion.usuario=sesion1.usuario
-  sesion.perfil = sesion1.perfil
-  sesion.token = sesion1.token
-}
-
-const LayoutBase = () => {
-
-  console.log('Llego 01:')
-
-  console.log(auth)
-    
-  console.log(sesion)
-  console.log(sesion.activo)
- 
+    setSesion(LOGIN_BASE)
+    authSesion.deleteSesion()
+    console.log("llego aqui a cerrar")
+    navigate('/')
+    console.log("se reenvio a \/")
+  }
+  
   return (
     <>
       <header className='py-2 px-0 '>
@@ -45,12 +44,12 @@ const LayoutBase = () => {
              )}
 
             { sesion.activo  && (
-                <Link to="/logout" className="hover:font-bold text-red-500 rounded-full bg-white px-3 text-center">Cerrar Sesión</Link>
+                <Link to="/" onClick={CerrarSesionAqui} className="hover:font-bold text-red-500 rounded-full bg-white px-3 text-center">Cerrar Sesión</Link>
              )}
 
 
             { !sesion.activo  && (
-                <Link to="/login" className="hover:font-bold text-blue-700 rounded-full bg-white px-3 text-center">Inicial Sesión</Link>
+                <Link to="/login" className="hover:font-bold text-blue-700 rounded-full bg-white px-3 text-center">Iniciar Sesión</Link>
              )}
 
 
